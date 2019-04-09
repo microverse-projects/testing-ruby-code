@@ -1,6 +1,6 @@
-require './lib/tic-tac-toe.rb'
+require './lib/tic_tac_toe.rb'
 
-RSpec.describe Game do
+describe Game do
   game1 = Game.new
   game1.add_player(1, 'Darshan') # X
   game1.add_player(2, 'Fabien') # O

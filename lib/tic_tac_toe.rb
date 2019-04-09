@@ -108,8 +108,8 @@ class Game
       print "\n#{@players[@current_role].name} move --> "
       input = gets.chomp
       case next_move(input)
-      when -1; puts "\n\t!! #{input} is invalid move !!"
-      when 0; puts"\n\t!! #{input} is already filled !!"
+      when -1 then puts "\n\t!! #{input} is invalid move !!"
+      when 0 then puts"\n\t!! #{input} is already filled !!"
       end
     end
   end
@@ -134,17 +134,23 @@ class Game
   end
 
   def pos(cell)
-    case cell.downcase
-    when 'a1','1a'; 1
-    when 'a2','2a'; 4
-    when 'a3','3a'; 7
-    when 'b1','1b'; 2
-    when 'b2','2b'; 5
-    when 'b3','3b'; 8
-    when 'c1','1c'; 3
-    when 'c2','2c'; 6
-    when 'c3','3c'; 9
-    else false
-    end
+    return {
+      'a1' => 1, '1a' => 1, 'a2' => 1, '2a' => 1, 'a3' => 1, '3a' => 1,
+      'b1' => 1, '1b' => 1, 'b2' => 1, '2b' => 1, 'b3' => 1, '3b' => 1,
+      'c1' => 1, '1c' => 1, 'c2' => 1, '2c' => 1, 'c3' => 1, '3c' => 1,
+    }[cell]
+    # case cell.downcase
+    # when 'a1', '1a' then 1
+    # when 'a2', '2a' then 4
+    # when 'a3', '3a' then 7
+    # when 'b1', '1b' then 2
+    # when 'b2', '2b' then 5
+    # when 'b3', '3b' then 8
+    # when 'c1', '1c' then 3
+    # when 'c2', '2c' then 6
+    # when 'c3', '3c' then 9
+    # else false
+    # end
+    return false
   end
 end
