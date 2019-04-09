@@ -76,8 +76,8 @@ class Game
   end
 
   def next_move(cell)
-    return -1 unless pos(cell)
-    return 0 unless @board.fill(sym(@current_role), pos(cell))
+    return :wrong unless pos(cell)
+    return :filled unless @board.fill(sym(@current_role), pos(cell))
     @players[@current_role].next_move(pos(cell))
     winner = check_winner
     return winner if winner
