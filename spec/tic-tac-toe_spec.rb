@@ -7,7 +7,7 @@ RSpec.describe Game do
 
   it 'checks the move' do
     game.next_move('a1') # X
-    expect(game.next_move('a1')).to eql(:filled) # Already used cell
+    expect(game.next_move('a1')).to eql(:filled) # Already filled cell
     expect(game.next_move('21')).to eql(:wrong) # Wrong move
   end
 
