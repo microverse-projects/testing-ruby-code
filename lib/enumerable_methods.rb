@@ -46,14 +46,14 @@ module Enumerable
   # Any
   def my_any?(pattern = nil)
     if block_given?
-      my_each { |v| return false unless yield(v) }
+      my_each { |v| return true if yield(v) }
     elsif pattern != nil
-      my_each { |v| return false unless pattern.match(v.to_s) }
+      my_each { |v| return true if pattern.match(v.to_s) }
     else
       my_each { |v| return true if v }
       return false
     end
-    return true
+    return false
   end
 
   # None
