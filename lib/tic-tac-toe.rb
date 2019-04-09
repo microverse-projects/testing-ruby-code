@@ -89,16 +89,6 @@ class Game
     WIN_POS.each { |item|
       win = (item&@players[@current_role].moves).length == 3
       return @players[@current_role] if win
-      # puts "\n\t\t\t\t*************** #{@players[@current_role].name} wins! ***************" if win
-      # puts "\n    \t\t\t~~ Draw game! It was a very tight battle. ~~" if draw
-      # if win || draw
-      #   print "\n Do you want to play again? (y if yes): "
-      #   if gets.chomp.downcase == 'y'
-      #     restart
-      #   else
-      #     stop
-      #   end
-      # end
     }
     return nil
   end
