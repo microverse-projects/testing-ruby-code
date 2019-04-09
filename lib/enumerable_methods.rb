@@ -1,9 +1,9 @@
+# Patching Enumerable module with custom methods
 module Enumerable
   # Each
   def my_each
-    unless block_given?
-      return to_enum(__method__)
-    end
+    return to_enum(__method__) unless block_given?
+
     for item in self
       yield item
     end
@@ -12,9 +12,8 @@ module Enumerable
   # Each with index
   def my_each_with_index
     i = 0
-    unless block_given?
-      return to_enum(__method__)
-    end
+    return to_enum(__method__) unless block_given?
+
     for item in self
       yield *item, i
       i += 1
@@ -23,49 +22,48 @@ module Enumerable
 
   # Select
   def my_select
-    unless block_given?
-      return to_enum(__method__)
-    end
+    return to_enum(__method__) unless block_given?
+
     res = []
-    my_each do |v| res.push(v) if yield(v) end
-    return res
+    my_each { |v| res.push(v) if yield(v) }
+    res
   end
 
   # All
   def my_all?(pattern = nil)
     if block_given?
       my_each { |v| return false unless yield(v) }
-    elsif pattern != nil
+    elsif !pattern.nil?
       my_each { |v| return false unless pattern.match(v.to_s) }
     else
       my_each { |v| return false unless v }
     end
-    return true
+    true
   end
 
   # Any
   def my_any?(pattern = nil)
     if block_given?
       my_each { |v| return true if yield(v) }
-    elsif pattern != nil
+    elsif !pattern.nil?
       my_each { |v| return true if pattern.match(v.to_s) }
     else
       my_each { |v| return true if v }
       return false
     end
-    return false
+    false
   end
 
   # None
   def my_none?(pattern = nil)
     if block_given?
       my_each { |v| return false if yield(v) }
-    elsif pattern != nil
+    elsif !pattern.nil?
       my_each { |v| return false if pattern.match(v.to_s) }
     else
       my_each { |v| return false if v }
     end
-    return true
+    true
   end
 
   # Count
@@ -73,42 +71,35 @@ module Enumerable
     res = 0
     if block_given?
       my_each { |v| res += 1 if yield(v) }
-    elsif item != nil
+    elsif !item.nil?
       my_each { |v| res += 1 if v == item }
     else
       res = size
     end
-    return res
+    res
   end
 
   # Map
   def my_map(&proc)
     res = []
-    if proc
-      my_each { |v| res.push(proc.call(v)) }
-    else
-      return to_enum(__method__)
-    end
-    return res
+    return to_enum(__method__) unless block_given?
+
+    my_each { |v| res.push(yield v) }
+    res
   end
 
   # Inject
-  def my_inject(p1 = nil, p2 = nil)
+  def my_inject(arg1 = nil, arg2 = nil)
     enum = my_each
-    if p1 && !(p1.is_a? Symbol)
-      memo = p1
+    memo = !(arg1.is_a? Symbol) ? arg1 : enum.shift
+    sym = arg1.is_a? Symbol ? arg1 : (arg2.is_a? Symbol ? arg2 : nil)
+    if block_given?
+      enum.my_each { |v| memo = yield(memo, v) }
     else
-      memo = enum.peek
-      enum = enum.drop(1)
-    end
-    sym = p1 && (p1.is_a? Symbol) ? p1 : (p2 && (p2.is_a? Symbol) ? p2 : nil)
-    unless block_given?
       m = method(sym) if sym
-      enum.my_each { |v| memo = m.call(memo, v)}
-    else
-      enum.my_each { |v| memo = yield(memo, v)}
+      enum.my_each { |v| memo = m.call(memo, v) }
     end
-    return memo
+    memo
   end
 
   # Multiply array items
@@ -117,7 +108,7 @@ module Enumerable
     for i in args
       res *= i
     end
-    return res
+    res
   end
 end
 
@@ -163,5 +154,5 @@ end
 
 # puts [2,5,6].my_inject(:multiply_els)
 # puts [2,5,6].my_inject(4, :multiply_els)
-# puts [2,5,6].my_inject { |sum, v| sum * v}
-# puts [2,5,6].my_inject(5) { |sum, v| sum * v}
+# puts [2,5,6].my_inject {|sum, v| sum * v}
+# puts [2,5,6].my_inject(5) {|sum, v| sum * v}

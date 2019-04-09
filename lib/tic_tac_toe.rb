@@ -1,14 +1,58 @@
 # UI
+class UI
+  def initialize(game)
+    @game = game
+    @board = Board.new
+  end
+
+  def credit
+    puts <<-HEREDOC
+    \t\t\t\t ********************************
+    \t\t\t\t *       TIC-TAC-TOE GAME       *
+    \t\t\t\t * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ *
+    \t\t\t\t *        FABIEN/DARSHAN        *
+    \t\t\t\t ********************************
+    HEREDOC
+  end
+
+  def start
+    credit
+    print "\n\n--> Player 1: #{@game.add_player(1, gets.chomp)}"
+    print "\n--> Player 2: #{@game.add_player(2, gets.chomp)}"
+    puts "---------------------\n"\
+      'Choose cell to fill using colum_index as a1 or 1a | b2 or 2b, ...'
+    iterate
+  end
+
+  def fill(sym, index)
+    @board.fill(sym, index)
+  end
+
+  def iterate
+    loop do
+      print "\n#{@players[@current_role].name} move --> "
+      input = gets.chomp
+      case next_move(input)
+      when :wrong then puts "\n\t!! #{input} is invalid move !!"
+      when :filled then puts "\n\t!! #{input} is already filled !!"
+      end
+    end
+  end
+end
+
+# A grid showing the moves of players
 class Board
   def initialize
-    @items = Array.new(9, " ")
+    @items = Array.new(9, ' ')
   end
+
   def fill(sym, index)
-    return false if @items[index-1].is_a? Symbol
-    @items[index-1] = sym
-    show
+    return false if @items[index - 1].is_a? Symbol
+
+    @items[index - 1] = sym
     true
   end
+
   def show
     puts <<-HEREDOC
     \t\t\t\t\t     A   B   C
@@ -21,97 +65,86 @@ class Board
     \t\t\t\t\t   -------------
     HEREDOC
   end
-  def credit
-    puts <<-HEREDOC
-    \t\t\t\t ********************************
-    \t\t\t\t *       TIC-TAC-TOE GAME       *
-    \t\t\t\t * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ *
-    \t\t\t\t *        FABIEN/DARSHAN        *
-    \t\t\t\t ********************************
-    HEREDOC
-    puts "\n"
-  end
 end
 
 # LOGIC
+# Store the player informations
 class Player
   attr_reader :name
   def initialize(name)
     @name = name
     @moves = Move.new
   end
+
   def next_move(pos)
     @moves.next(pos)
   end
+
   def moves
     @moves.get
   end
 end
 
+# Track the players move
 class Move
   def initialize
     @track = []
   end
+
   def next(pos)
     @track.push(pos)
   end
+
   def get
     @track
   end
 end
 
+# Represent the game functionality
 class Game
-  WIN_POS = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
+  WIN_POS = [
+    [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
+    [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]
+  ].freeze
   def initialize
     @players = {}
     @moves = 0
-    @board = Board.new
+    @ui = UI.new(self)
   end
 
   def add_player(role, name)
     return false if @players[role]
+
     @players[role] = Player.new(name)
     @current_role = 1 if role == 1
-    return true
+    true
   end
 
   def next_move(cell)
     return :wrong unless pos(cell)
-    return :filled unless @board.fill(sym(@current_role), pos(cell))
+
+    return :filled unless @ui.fill(sym(@current_role), pos(cell))
+
     @players[@current_role].next_move(pos(cell))
     @moves += 1
     winner = check_winner
     return winner if winner
+
     return :draw if @moves == 9
+
     @current_role = @current_role == 1 ? 2 : 1
   end
 
   def check_winner
-    WIN_POS.each { |item|
-      win = (item&@players[@current_role].moves).length == 3
+    WIN_POS.each do |item|
+      win = (item & @players[@current_role].moves).length == 3
       return @players[@current_role] if win
-    }
-    return nil
+    end
+    nil
   end
 
   def start
-    @board.credit
-    @board.show
-    puts "\n\n"
-    print '--> Player 1: '
-    add_player(1, gets.chomp)
-    print "\n--> Player 2: "
-    add_player(2, gets.chomp)
-    puts '---------------------'
-    puts "\n Choose cell to fill using colum_index as a1 or 1a | b2 or 2b, ..."
-    loop do
-      print "\n#{@players[@current_role].name} move --> "
-      input = gets.chomp
-      case next_move(input)
-      when -1 then puts "\n\t!! #{input} is invalid move !!"
-      when 0 then puts "\n\t!! #{input} is already filled !!"
-      end
-    end
+    @ui.start
   end
 
   def restart

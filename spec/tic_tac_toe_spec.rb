@@ -1,10 +1,16 @@
 require './lib/tic_tac_toe.rb'
 
-describe Game do
-  game1 = Game.new
-  game1.add_player(1, 'Darshan') # X
-  game1.add_player(2, 'Fabien') # O
+# Init game1
+game1 = Game.new
+game1.add_player(1, 'Darshan') # X
+game1.add_player(2, 'Fabien') # O
 
+# Init game2
+game2 = Game.new
+game2.add_player(1, 'Darshan') # X
+game2.add_player(2, 'Fabien') # O
+
+describe Game do
   it 'checks the move' do
     game1.next_move('a1') # X
     expect(game1.next_move('a1')).to eql(:filled) # Already filled cell
@@ -19,10 +25,6 @@ describe Game do
     game1.next_move('c2')  # O
     expect(game1.next_move('3c').name).to eql('Darshan')
   end
-
-  game2 = Game.new
-  game2.add_player(1, 'Darshan') # X
-  game2.add_player(2, 'Fabien') # O
 
   it 'checks a draw' do
     game2.next_move('a1')  # X
