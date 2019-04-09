@@ -109,7 +109,7 @@ class Game
       input = gets.chomp
       case next_move(input)
       when -1 then puts "\n\t!! #{input} is invalid move !!"
-      when 0 then puts"\n\t!! #{input} is already filled !!"
+      when 0 then puts "\n\t!! #{input} is already filled !!"
       end
     end
   end
@@ -120,10 +120,12 @@ class Game
   end
 
   def stop
-    puts "\n\t\t\t\t----> See you next time! <----\n"; exit
+    puts "\n\t\t\t\t----> See you next time! <----\n"
+    exit
   end
 
   private
+
   def sym(role)
     case role
     when 1
@@ -137,8 +139,7 @@ class Game
     return {
       'a1' => 1, '1a' => 1, 'a2' => 4, '2a' => 4, 'a3' => 7, '3a' => 7,
       'b1' => 2, '1b' => 2, 'b2' => 5, '2b' => 5, 'b3' => 8, '3b' => 8,
-      'c1' => 3, '1c' => 3, 'c2' => 6, '2c' => 6, 'c3' => 9, '3c' => 9,
+      'c1' => 3, '1c' => 3, 'c2' => 6, '2c' => 6, 'c3' => 9, '3c' => 9
     }[cell]
-    return false
   end
 end
