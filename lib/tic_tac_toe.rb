@@ -98,7 +98,7 @@ class Game
     @board.credit
     @board.show
     puts "\n\n"
-    print "--> Player 1: "
+    print '--> Player 1: '
     add_player(1, gets.chomp)
     print "\n--> Player 2: "
     add_player(2, gets.chomp)
@@ -136,7 +136,7 @@ class Game
   end
 
   def pos(cell)
-    return {
+    {
       'a1' => 1, '1a' => 1, 'a2' => 4, '2a' => 4, 'a3' => 7, '3a' => 7,
       'b1' => 2, '1b' => 2, 'b2' => 5, '2b' => 5, 'b3' => 8, '3b' => 8,
       'c1' => 3, '1c' => 3, 'c2' => 6, '2c' => 6, 'c3' => 9, '3c' => 9
