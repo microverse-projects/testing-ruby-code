@@ -135,22 +135,10 @@ class Game
 
   def pos(cell)
     return {
-      'a1' => 1, '1a' => 1, 'a2' => 1, '2a' => 1, 'a3' => 1, '3a' => 1,
-      'b1' => 1, '1b' => 1, 'b2' => 1, '2b' => 1, 'b3' => 1, '3b' => 1,
-      'c1' => 1, '1c' => 1, 'c2' => 1, '2c' => 1, 'c3' => 1, '3c' => 1,
+      'a1' => 1, '1a' => 1, 'a2' => 4, '2a' => 4, 'a3' => 7, '3a' => 7,
+      'b1' => 2, '1b' => 2, 'b2' => 5, '2b' => 5, 'b3' => 8, '3b' => 8,
+      'c1' => 3, '1c' => 3, 'c2' => 6, '2c' => 6, 'c3' => 9, '3c' => 9,
     }[cell]
-    # case cell.downcase
-    # when 'a1', '1a' then 1
-    # when 'a2', '2a' then 4
-    # when 'a3', '3a' then 7
-    # when 'b1', '1b' then 2
-    # when 'b2', '2b' then 5
-    # when 'b3', '3b' then 8
-    # when 'c1', '1c' then 3
-    # when 'c2', '2c' then 6
-    # when 'c3', '3c' then 9
-    # else false
-    # end
     return false
   end
 end
