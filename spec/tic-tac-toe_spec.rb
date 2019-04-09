@@ -1,26 +1,39 @@
 require './lib/tic-tac-toe.rb'
 
 RSpec.describe Game do
-  game = Game.new
-  game.add_player(1, 'Darshan') # X
-  game.add_player(2, 'Fabien') # O
+  game1 = Game.new
+  game1.add_player(1, 'Darshan') # X
+  game1.add_player(2, 'Fabien') # O
 
   it 'checks the move' do
-    game.next_move('a1') # X
-    expect(game.next_move('a1')).to eql(:filled) # Already filled cell
-    expect(game.next_move('21')).to eql(:wrong) # Wrong move
+    game1.next_move('a1') # X
+    expect(game1.next_move('a1')).to eql(:filled) # Already filled cell
+    expect(game1.next_move('21')).to eql(:wrong) # Wrong move
   end
 
   it 'checks the winner' do
-    game.next_move('b1')  # O
-    game.next_move('2a')  # X
-    game.next_move('a3')  # O
-    game.next_move('b2')  # X
-    game.next_move('c2')  # O
-    expect(game.next_move('3c').name).to eql('Darshan')
+    game1.next_move('b1')  # O
+    game1.next_move('2a')  # X
+    game1.next_move('a3')  # O
+    game1.next_move('b2')  # X
+    game1.next_move('c2')  # O
+    expect(game1.next_move('3c').name).to eql('Darshan')
   end
 
+  game2 = Game.new
+  game2.add_player(1, 'Darshan') # X
+  game2.add_player(2, 'Fabien') # O
+
   it 'checks a draw' do
-    # expect(game.next_move('')).to eql(:draw)
+    game2.next_move('a1')  # X
+    game2.next_move('b2')  # O
+    game2.next_move('a2')  # X
+    game2.next_move('a3')  # O
+    game2.next_move('c1')  # X
+    game2.next_move('b1')  # O
+    game2.next_move('b3')  # X
+    game2.next_move('c2')  # O
+
+    expect(game2.next_move('c3')).to eql(:draw)
   end
 end

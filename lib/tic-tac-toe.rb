@@ -79,6 +79,7 @@ class Game
     return :wrong unless pos(cell)
     return :filled unless @board.fill(sym(@current_role), pos(cell))
     @players[@current_role].next_move(pos(cell))
+    @moves += 1
     winner = check_winner
     return winner if winner
     return :draw if @moves == 9
