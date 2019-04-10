@@ -1,8 +1,7 @@
 require './lib/tic_tac_toe/logic.rb'
 
 describe Game do
-
-  let(:game) {Game.new}
+  let(:game) { Game.new }
 
   before do
     # game
