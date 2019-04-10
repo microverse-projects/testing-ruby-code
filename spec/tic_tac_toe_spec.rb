@@ -1,16 +1,19 @@
 require './lib/logic.rb'
 
-# Init game1
-game1 = Game.new
-game1.add_player(1, 'Darshan') # X
-game1.add_player(2, 'Fabien') # O
-
-# Init game2
-game2 = Game.new
-game2.add_player(1, 'Darshan') # X
-game2.add_player(2, 'Fabien') # O
-
 describe Game do
+
+  let(:game1) {Game.new}
+  let(:game2) {Game.new}
+
+  before do
+    # game1
+    game1.add_player(1, 'Darshan') # X
+    game1.add_player(2, 'Fabien') # O
+    # game2
+    game2.add_player(1, 'Darshan') # X
+    game2.add_player(2, 'Fabien') # O
+  end
+
   it 'checks the move' do
     game1.next_move('a1') # X
     expect(game1.next_move('a1')).to eql(:filled) # Already filled cell
@@ -36,7 +39,6 @@ describe Game do
     game2.next_move('b1')  # O
     game2.next_move('b3')  # X
     game2.next_move('c2')  # O
-
     expect(game2.next_move('c3')).to eql(:draw)
   end
 end
