@@ -89,10 +89,12 @@ module Enumerable
   end
 
   # Inject
-  def my_inject(arg1 = nil, arg2 = nil)
+  def my_inject(*args)
     enum = my_each
-    memo = !(arg1.is_a? Symbol) ? arg1 : enum.shift
-    sym = arg1.is_a? Symbol ? arg1 : (arg2.is_a? Symbol ? arg2 : nil)
+    memo = args[0] && !(args[0].is_a? Symbol) ? args[0] : enum.peek
+    enum.drop(1)
+    sym = args[0] && (args[0].is_a? Symbol) ? args[0] :
+      (args[1] && (args[1].is_a? Symbol) ? args[1] : nil)
     if block_given?
       enum.my_each { |v| memo = yield(memo, v) }
     else
@@ -114,45 +116,45 @@ end
 
 # TESTS
 
-# [1,2,2,3,5,8,9].my_each {|i| puts i}
-# {a: "Fabien", v: "1.0", l: "Ruby"}.my_each {|k| puts "#{k}"}
+[1,2,2,3,5,8,9].my_each {|i| puts i}
+{a: "Fabien", v: "1.0", l: "Ruby"}.my_each {|k| puts "#{k}"}
 
-# [1,2,2,3,5,8,9].my_each_with_index {|v, i| puts "#{v} at index #{i}"}
-# {a: "Fabien", v: "1.0", l: "Ruby"}.my_each_with_index {|k, v, i| puts "#{k}: #{v} at index #{i}"}
+[1,2,2,3,5,8,9].my_each_with_index {|v, i| puts "#{v} at index #{i}"}
+{a: "Fabien", v: "1.0", l: "Ruby"}.my_each_with_index {|k, v, i| puts "#{k}: #{v} at index #{i}"}
 
-# print [1,2,2,3,5,8,9].my_select { |v| v.odd? }
-# print ({"author" => "Fabien", v: "1.0", l: "Ruby", rate: 5}.my_select { |k, v| v.is_a? Integer })
+print [1,2,2,3,5,8,9].my_select { |v| v.odd? }
+print ({"author" => "Fabien", v: "1.0", l: "Ruby", rate: 5}.my_select { |k, v| v.is_a? Integer })
 
-# print [1,2,2,3,5,8,9].my_all? { |v| v % 3 == 0 }
-# print [1,2,2,3,5,8,9].my_all?(/\D/)
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_all? { |k, v| v.is_a? Integer })
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_all?(/\d/))
+print [1,2,2,3,5,8,9].my_all? { |v| v % 3 == 0 }
+print [1,2,2,3,5,8,9].my_all?(/\D/)
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_all? { |k, v| v.is_a? Integer })
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_all?(/\d/))
 
-# print [nil, false].my_any?
-# print [1,2,nil,3,5,8,9].my_any? { |v| v || v == nil }
-# print [1,2,4,3,5,8,9].my_any?(/\d/)
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_any?)
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_any? { |k, v| v.length > 3 })
+print [nil, false].my_any?
+print [1,2,nil,3,5,8,9].my_any? { |v| v || v == nil }
+print [1,2,4,3,5,8,9].my_any?(/\d/)
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_any?)
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_any? { |k, v| v.length > 3 })
 
-# print [nil, false].my_none?
-# print [1,2,nil,3,5,8,9].my_none? { |v| v && v > 10 }
-# print [1,2,4,3,5,8,9].my_none?(/\D/)
-# print [].my_none?
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_none? { |k, v| v == "Fabien" })
+print [nil, false].my_none?
+print [1,2,nil,3,5,8,9].my_none? { |v| v && v > 10 }
+print [1,2,4,3,5,8,9].my_none?(/\D/)
+print [].my_none?
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_none? { |k, v| v == "Fabien" })
 
-# print [1,2,4,3,5,8,9].my_count
-# print [1,2,2,3,5,8,9].my_count(0)
-# print [1,2,3,3,7,8,9].my_count{|v| v < 6}
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_count)
+print [1,2,4,3,5,8,9].my_count
+print [1,2,2,3,5,8,9].my_count(0)
+print [1,2,3,3,7,8,9].my_count{|v| v < 6}
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_count)
 
-# print [1,2,4,3,5,8,9].my_map.first(5)
-# print [1,2,4,3,5,8,9].my_map { |v| v * 2 }
-# print [1,2,4,3,5,8,9].my_map(Proc.new { |v| v * 3 })
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_map.first(2))
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_map { |k, v| [k.to_s.to_sym, v * 3] })
-# print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_map(&Proc.new { |k, v| v }))
+print [1,2,4,3,5,8,9].my_map.first(5)
+print [1,2,4,3,5,8,9].my_map { |v| v * 2 }
+print [1,2,4,3,5,8,9].my_map(&Proc.new { |v| v * 3 })
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_map.first(2))
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_map { |k, v| [k.to_s.to_sym, v * 3] })
+print ({a: "Fabien", v: "1.0", l: "Ruby"}.my_map(&Proc.new { |k, v| v }))
 
-# puts [2,5,6].my_inject(:multiply_els)
-# puts [2,5,6].my_inject(4, :multiply_els)
-# puts [2,5,6].my_inject {|sum, v| sum * v}
-# puts [2,5,6].my_inject(5) {|sum, v| sum * v}
+puts [2,5,6].my_inject(:multiply_els)
+puts [2,5,6].my_inject(4, :multiply_els)
+puts [2,5,6].my_inject {|sum, v| sum * v}
+puts [2,5,6].my_inject(5) {|sum, v| sum * v}

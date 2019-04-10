@@ -1,4 +1,4 @@
-require './lib/tic_tac_toe.rb'
+require './lib/logic.rb'
 
 # Init game1
 game1 = Game.new
@@ -18,12 +18,13 @@ describe Game do
   end
 
   it 'checks the winner' do
-    game1.next_move('b1')  # O
-    game1.next_move('2a')  # X
-    game1.next_move('a3')  # O
-    game1.next_move('b2')  # X
-    game1.next_move('c2')  # O
-    expect(game1.next_move('3c').name).to eql('Darshan')
+    game1.next_move('b1') # O
+    game1.next_move('2a') # X
+    game1.next_move('a3') # O
+    game1.next_move('b2') # X
+    game1.next_move('c2') # O
+    game1.next_move('3c') # X
+    expect(game1.player.name).to eql('Darshan')
   end
 
   it 'checks a draw' do
