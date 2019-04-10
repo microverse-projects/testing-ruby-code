@@ -1,4 +1,4 @@
-require './lib/logic.rb'
+require './lib/tic_tac_toe/logic.rb'
 
 describe Game do
 
